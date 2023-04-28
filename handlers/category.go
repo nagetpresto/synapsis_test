@@ -1,13 +1,12 @@
 package handlers
 
 import (
-	productsdto "BE/dto/products"
+	categorydto "BE/dto/category"
 	dto "BE/dto/result"
 	"BE/models"
 	"BE/repositories"
 	"net/http"
 	"strconv"
-	"context"
 	"os"
 	"fmt"
 
@@ -18,51 +17,39 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-var ctx = context.Background()
-
-type handlerProduct struct {
-	ProductRepository repositories.ProductRepository
+type handlerCategory struct {
+	CategoryRepository repositories.CategoryRepository
 	CartRepository     repositories.CartRepository
 }
 
-func HandlerProduct(ProductRepository repositories.ProductRepository, CartRepository repositories.CartRepository) *handlerProduct {
-	return &handlerProduct{
-		ProductRepository: ProductRepository,
+func HandlerCategory(CategoryRepository repositories.CategoryRepository, CartRepository repositories.CartRepository) *handlerCategory {
+	return &handlerCategory{
+		CategoryRepository: CategoryRepository,
 		CartRepository:     CartRepository,
 	}
 }
 
-func (h *handlerProduct) GetAllProduct(c echo.Context) error {
-	products, err := h.ProductRepository.GetAllProduct()
+func (h *handlerCategory) GetAllCategory(c echo.Context) error {
+	Category, err := h.CategoryRepository.GetAllCategory()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	}
-	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: products})
+	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: Category})
 }
 
-func (h *handlerProduct) GetAllProductbyCategory(c echo.Context) error {
-	CategoryID, _ := strconv.Atoi(c.QueryParam("category_id"))
-
-	products, err := h.ProductRepository.GetAllProductbyCategory(CategoryID)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
-	}
-	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: products})
-}
-
-func (h *handlerProduct) GetOneProduct(c echo.Context) error {
+func (h *handlerCategory) GetOneCategory(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	var product models.Product
-	product, err := h.ProductRepository.GetOneProduct(id)
+	var Category models.Category
+	Category, err := h.CategoryRepository.GetOneCategory(id)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	}
 
-	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: product})
+	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: Category})
 }
 
-func (h *handlerProduct) CreateProduct(c echo.Context) error {
+func (h *handlerCategory) CreateCategory(c echo.Context) error {
 	userLogin := c.Get("userLogin")
 	userId := int(userLogin.(jwt.MapClaims)["id"].(float64))
 
@@ -72,7 +59,7 @@ func (h *handlerProduct) CreateProduct(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: "Email has not been confirmed"})
 	}
 
-	request := new(productsdto.CreateProductRequest)
+	request := new(categorydto.CreateCategoryRequest)
 	if err := c.Bind(request); err != nil {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	}
@@ -100,56 +87,36 @@ func (h *handlerProduct) CreateProduct(c echo.Context) error {
 		ImageCloud =  ""
 	}
 
-	product := models.Product{
-		CategoryID:		request.CategoryID,
-		Name:   		request.Name,
-		Stock:  		request.Stock,
-		Price:  		request.Price,
-		Description:	request.Description,
-		Image:  		ImageCloud,
+	Category := models.Category{
+		Name:  request.Name,
+		Image: ImageCloud,
 	}
 
-	product, err = h.ProductRepository.CreateProduct(product)
+	Category, err = h.CategoryRepository.CreateCategory(Category)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()})
 	}
 
-	product, _ = h.ProductRepository.GetOneProduct(product.ID)
+	Category, _ = h.CategoryRepository.GetOneCategory(Category.ID)
 
-	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: product})
+	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: Category})
 }
 
-func (h *handlerProduct) UpdateProduct(c echo.Context) error {
-	request := new(productsdto.UpdateProductRequest)
+func (h *handlerCategory) UpdateCategory(c echo.Context) error {
+	request := new(categorydto.UpdateCategoryRequest)
 	if err := c.Bind(request); err != nil {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	}
 	
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	product, err := h.ProductRepository.GetOneProduct(id)
+	Category, err := h.CategoryRepository.GetOneCategory(id)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	}
 
-	if request.CategoryID != 0 {
-		product.CategoryID = request.CategoryID
-	}
-
 	if request.Name != "" {
-		product.Name = request.Name
-	}
-
-	if request.Stock != 0 {
-		product.Stock = request.Stock
-	}
-
-	if request.Price != 0 {
-		product.Price = request.Price
-	}
-
-	if request.Description != "" {
-		product.Description = request.Description
+		Category.Name = request.Name
 	}
 
 	// get from middleware
@@ -162,11 +129,11 @@ func (h *handlerProduct) UpdateProduct(c echo.Context) error {
 		if err != nil {
 		fmt.Println(err.Error())
 		}
-		product.Image =  resp.SecureURL
+		Category.Image =  resp.SecureURL
 
 	}
 	
-	data, err := h.ProductRepository.UpdateProduct(product)
+	data, err := h.CategoryRepository.UpdateCategory(Category)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()})
 	}
@@ -174,15 +141,15 @@ func (h *handlerProduct) UpdateProduct(c echo.Context) error {
 	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: data})
 }
 
-func (h *handlerProduct) DeleteProduct(c echo.Context) error {
+func (h *handlerCategory) DeleteCategory(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	product, err := h.ProductRepository.GetOneProduct(id)
+	Category, err := h.CategoryRepository.GetOneCategory(id)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	}
 
-	data, err := h.ProductRepository.DeleteProduct(product, id)
+	data, err := h.CategoryRepository.DeleteCategory(Category, id)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()})
 	}

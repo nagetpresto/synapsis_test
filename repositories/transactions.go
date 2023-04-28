@@ -13,7 +13,7 @@ type TransactionRepository interface {
 
 	GetActiveTransaction(UserID int) (models.Transaction, error)
 	DoTransaction(transaction models.Transaction, ID int) (models.Transaction, error)
-	UpdateStatsTransaction(status string, ID int) error
+	UpdateStatsTransaction(status string, ID int) error //for midtrans
 
 	UpdateTransaction(transaction models.Transaction, ID int) (models.Transaction, error)
 	GetProduct() (models.Product, error)
@@ -26,25 +26,25 @@ func RepositoryTransaction(db *gorm.DB) *repository {
 }
 func (r *repository) GetAllTransaction() ([]models.Transaction, error) {
 	var transactions []models.Transaction
-	err := r.db.Order("id").Preload("User").Preload("Cart").Preload("Cart.Product").Find(&transactions, "status!=?", "active").Error
+	err := r.db.Order("id").Preload("User").Preload("Cart").Preload("Cart.Product").Preload("Cart.Product.Category").Find(&transactions, "status!=?", "active").Error
 	return transactions, err
 }
 
 func (r *repository) GetOneTransaction(ID int) (models.Transaction, error) {
 	var transaction models.Transaction
-	err := r.db.Order("id").Preload("User").Preload("Cart").Preload("Cart.Product").First(&transaction, ID).Error
+	err := r.db.Order("id").Preload("User").Preload("Cart").Preload("Cart.Product").Preload("Cart.Product.Category").First(&transaction, ID).Error
 	return transaction, err
 }
 
 func (r *repository) GetUserTrans(UserID int) ([]models.Transaction, error) {
 	var transaction []models.Transaction
-	err := r.db.Order("id").Preload("User").Preload("Cart").Preload("Cart.Product").Where("user_id = ? AND status!=?", UserID, "active").Order("id desc").Find(&transaction).Error
+	err := r.db.Order("id").Preload("User").Preload("Cart").Preload("Cart.Product").Preload("Cart.Product.Category").Where("user_id = ? AND status!=?", UserID, "active").Order("id desc").Find(&transaction).Error
 	return transaction, err
 }
 
 func (r *repository) GetActiveTransaction(UserID int) (models.Transaction, error) {
 	var transaction models.Transaction
-	err := r.db.Order("id").Preload("User").Preload("Cart").Preload("Cart.Product").Where("user_id = ? AND status = ?", UserID, "active").First(&transaction).Error
+	err := r.db.Order("id").Preload("User").Preload("Cart").Preload("Cart.Product").Preload("Cart.Product.Category").Where("user_id = ? AND status = ?", UserID, "active").First(&transaction).Error
 	return transaction, err
 }
 
@@ -55,7 +55,7 @@ func (r *repository) DoTransaction(transaction models.Transaction, ID int) (mode
 
 func (r *repository) UpdateStatsTransaction(status string, ID int) error {
 	var transaction models.Transaction
-	r.db.Preload("User").Preload("Cart").Preload("Cart.Product").First(&transaction, ID)
+	r.db.Preload("User").Preload("Cart").Preload("Cart.Product").Preload("Cart.Product.Category").First(&transaction, ID)
 
 	// if status == "Success" {
 	// 	var product models.Product

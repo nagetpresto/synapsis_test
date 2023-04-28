@@ -12,9 +12,11 @@ import (
 
 func ProductRoutes(e *echo.Group) {
 	productRepository := repositories.RepositoryProduct(mysql.DB)
-	h := handlers.HandlerProduct(productRepository)
+	cartRepository := repositories.RepositoryCart(mysql.DB)
+	h := handlers.HandlerProduct(productRepository, cartRepository)
 
-	e.GET("/products", (h.GetAllProduct))
+	e.GET("/products/all", (h.GetAllProduct))
+	e.GET("/products", (h.GetAllProductbyCategory))
 	e.GET("/products/:id", (h.GetOneProduct))
 	e.POST("/products", middleware.AdminOnly(middleware.UploadFile(h.CreateProduct)))
 	e.PATCH("/products/:id", middleware.AdminOnly(middleware.UploadFile(h.UpdateProduct)))

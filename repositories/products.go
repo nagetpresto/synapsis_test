@@ -8,10 +8,11 @@ import (
 
 type ProductRepository interface {
 	GetAllProduct() ([]models.Product, error)
+	GetAllProductbyCategory(ID int) ([]models.Product, error)
 	GetOneProduct(ID int) (models.Product, error)
 	CreateProduct(product models.Product) (models.Product, error)
-	UpdateProduct(user models.Product) (models.Product, error)
-	DeleteProduct(user models.Product, ID int) (models.Product, error)
+	UpdateProduct(product models.Product) (models.Product, error)
+	DeleteProduct(product models.Product, ID int) (models.Product, error)
 }
 
 func RepositoryProduct(db *gorm.DB) *repository {
@@ -20,14 +21,21 @@ func RepositoryProduct(db *gorm.DB) *repository {
 
 func (r *repository) GetAllProduct() ([]models.Product, error) {
 	var products []models.Product
-	err := r.db.Order("id").Find(&products).Error
+	err := r.db.Order("id").Preload("Category").Find(&products).Error
+
+	return products, err
+}
+
+func (r *repository) GetAllProductbyCategory(ID int) ([]models.Product, error) {
+	var products []models.Product
+	err := r.db.Order("id").Preload("Category").Find(&products, "category_id = ?", ID).Error
 
 	return products, err
 }
 
 func (r *repository) GetOneProduct(ID int) (models.Product, error) {
 	var product models.Product
-	err := r.db.First(&product, ID).Error
+	err := r.db.Preload("Category").First(&product, ID).Error
 
 	return product, err
 }

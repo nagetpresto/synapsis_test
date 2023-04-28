@@ -28,7 +28,7 @@ func (r *repository) Register(user models.User) (models.User, error) {
 
 func (r *repository) GetUserByEmail(email string) (models.User, error) {
 	var user models.User
-	err := r.db.Preload("Transaction").Preload("Transaction.User").Preload("Transaction.Cart").Preload("Transaction.Cart.Product").First(&user, "email=?", email).Error // add this code
+	err := r.db.First(&user, "email=?", email).Error // add this code
 	return user, err
 }
 
@@ -41,7 +41,7 @@ func (r *repository) Login(email string) (models.User, error) {
 
 func (r *repository) GetActiveUser(ID int) (models.User, error) {
 	var user models.User
-	err := r.db.Preload("Transaction").Preload("Transaction.Cart").Preload("Transaction.Cart.Product").Where("id = ?", ID).First(&user, ID).Error 
+	err := r.db.Where("id = ?", ID).First(&user, ID).Error 
 
 	return user, err
 }

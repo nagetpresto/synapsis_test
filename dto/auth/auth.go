@@ -29,3 +29,14 @@ type LoginResponse struct {
 	ConfirmCode	string 	`gorm:"type: varchar(255)" json:"confirm_code"`
 	Token    	string 	`gorm:"type: varchar(255)" json:"token"`
 }
+
+type ProfileResponse struct {
+	ID       	int    	`json:"id" gorm:"primary_key:auto_increment"`
+	Name     	string 	`gorm:"type: varchar(255)" json:"name"`
+	Email    	string 	`gorm:"type: varchar(255)" json:"email"`
+	Password 	string 	`gorm:"type: varchar(255)" json:"password"`
+	Image 		string 	`gorm:"type: varchar(255)" json:"image"`
+	Status 		string 	`gorm:"type: varchar(255)" json:"status"`
+	IsConfirmed	bool 	`gorm:"type:boolean" json:"is_confirmed"`
+	ConfirmCode	string 	`gorm:"type: varchar(255)" json:"confirm_code"`
+}

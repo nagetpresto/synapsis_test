@@ -11,6 +11,7 @@ type CartRepository interface {
 	GetOneCart(ID int) (models.Cart, error)
 	GetActiveCart(TransID int) ([]models.Cart, error)
 
+	GetUserEmailStats(ID int) (models.User, error)
 	CreateCart(Cart models.Cart) (models.Cart, error)
 	GetActiveTrans(UserID int) (models.Transaction, error)
 	CreateTransaction(transaction models.Transaction) (models.Transaction, error)
@@ -27,23 +28,29 @@ func RepositoryCart(db *gorm.DB) *repository {
 
 func (r *repository) GetAllCart() ([]models.Cart, error) {
 	var cart []models.Cart
-	err := r.db.Order("id").Preload("Product").Find(&cart).Error
+	err := r.db.Order("id").Preload("Product").Preload("Product.Category").Find(&cart).Error
 
 	return cart, err
 }
 
 func (r *repository) GetOneCart(ID int) (models.Cart, error) {
 	var cart models.Cart
-	err := r.db.Preload("Product").First(&cart, ID).Error
+	err := r.db.Preload("Product").Preload("Product.Category").First(&cart, ID).Error
 
 	return cart, err
 }
 
 func (r *repository) GetActiveCart(TransID int) ([]models.Cart, error) {
 	var carts []models.Cart
-	err := r.db.Order("id").Preload("Product").Find(&carts, "transaction_id = ?", TransID).Error
+	err := r.db.Order("id").Preload("Product").Preload("Product.Category").Find(&carts, "transaction_id = ?", TransID).Error
 
 	return carts, err
+}
+
+func (r *repository) GetUserEmailStats(ID int) (models.User, error) {
+	var user models.User
+	err := r.db.Preload("Transaction").Preload("Transaction.User").Preload("Transaction.Cart").Preload("Transaction.Cart.Product").First(&user, "id=? AND is_confirmed=?", ID, true).Error // add this code
+	return user, err
 }
 
 func (r *repository) GetActiveTrans(UserID int) (models.Transaction, error) {

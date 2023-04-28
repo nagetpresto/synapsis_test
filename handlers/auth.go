@@ -130,7 +130,7 @@ func (h *handlerAuth) Register(c echo.Context) error {
 
 	sendEmailConfirmation(data)
 
-	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: data})
+	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: convertResponseProfile(data)})
 }
 
 func (h *handlerAuth) ConfirmEmail(c echo.Context) error {
@@ -207,8 +207,7 @@ func (h *handlerAuth) GetActiveUser(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	}
-
-	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: user})
+	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: convertResponseProfile(user)})
 }
 
 func (h *handlerAuth) UpdateActiveUser(c echo.Context) error {
@@ -260,5 +259,18 @@ func (h *handlerAuth) UpdateActiveUser(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()})
 	}
 
-	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: data})
+	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: convertResponseProfile(data)})
+}
+
+func convertResponseProfile(u models.User) authdto.ProfileResponse {
+	return authdto.ProfileResponse{
+		ID: 			u.ID,
+		Name:     		u.Name,
+		Email:    		u.Email,
+		Password: 		u.Password,
+		Image: 			u.Image,
+		Status: 		u.Status,
+		IsConfirmed: 	u.IsConfirmed,
+		ConfirmCode: 	u.ConfirmCode,
+	}
 }

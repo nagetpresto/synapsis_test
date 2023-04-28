@@ -2,7 +2,7 @@ package cartsdto
 
 type CreateCartRequest struct {
 	UserID    	  int `json:"user_id"`
-	ProductID     int `json:"product_id"`
+	ProductID     int `json:"product_id" validate:"required"`
 	Qty           int `json:"qty"`
 }
 

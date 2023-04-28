@@ -53,6 +53,15 @@ func (h *handlerCart) GetActiveCart(c echo.Context) error {
 }
 
 func (h *handlerCart) CreateCart(c echo.Context) error {
+	userLogin := c.Get("userLogin")
+	userId := int(userLogin.(jwt.MapClaims)["id"].(float64))
+
+	// Check if email already confirmed
+	_, error := h.CartRepository.GetUserEmailStats(userId)
+	if error != nil {
+		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: "Email has not been confirmed"})
+	}
+
 	request := new(cartsdto.CreateCartRequest)
 	if err := c.Bind(request); err != nil {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
@@ -63,9 +72,6 @@ func (h *handlerCart) CreateCart(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	}
-
-	userLogin := c.Get("userLogin")
-	userId := int(userLogin.(jwt.MapClaims)["id"].(float64))
 
 	// cek active transaction
 	transaction, err := h.CartRepository.GetActiveTrans(userId)
