@@ -22,16 +22,16 @@ https://hub.docker.com/r/nagetpresto/synapsis_test_db
 # Database Design
 ## User Table:
 - Columns: 
-• ID (int, PK),
-• Name (string),
-• Email (string),
-• Password (string),
-• Image (string),
-• Status (string),
-• IsConfirmed (boolean),
-• ConfirmCode (string)
+	- ID (int, PK),
+	- Name (string),
+	- Email (string),
+	- Password (string),
+	- Image (string),
+	- Status (string),
+	- IsConfirmed (boolean),
+	- ConfirmCode (string)
 - Relationships:
-• One-to-Many with Transaction: A user can have multiple transactions.
+	- One-to-Many with Transaction: A user can have multiple transactions.
 
 ## Category Table:
 - Columns: 
