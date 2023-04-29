@@ -35,53 +35,53 @@ https://hub.docker.com/r/nagetpresto/synapsis_test_db
 
 ## Category Table:
 - Columns: 
-	• ID (int, PK),
-	• Name (string),
-	• Image (string)
+	- ID (int, PK),
+	- Name (string),
+	- Image (string)
 - Relationships:
-	• One-to-Many with Product: A category can have multiple products.
+	- One-to-Many with Product: A category can have multiple products.
 
 ## Product Table:
 - Columns: 
-	• ID (int, PK),
-	• CategoryID (int, FK),
-	• Name (string),
-	• Stock (int),
-	• Price (int),
-	• Description (string),
-	• Image (string)
+	- ID (int, PK),
+	- CategoryID (int, FK),
+	- Name (string),
+	- Stock (int),
+	- Price (int),
+	- Description (string),
+	- Image (string)
 - Relationships:
-	• Many-to-One with Category: A product belongs to a category.
-	• One-to-Many with Cart: A product can be present in multiple carts.
+	- Many-to-One with Category: A product belongs to a category.
+	- One-to-Many with Cart: A product can be present in multiple carts.
 
 ## Cart Table:
 - Columns:
-	• ID (int, PK),
-	• UserID (int, FK),
-	• ProductID (int, FK),
-	• Qty (int),
-	• Amount (int),
-	• TransactionID (int, FK)
+	- ID (int, PK),
+	- UserID (int, FK),
+	- ProductID (int, FK),
+	- Qty (int),
+	- Amount (int),
+	- TransactionID (int, FK)
 - Relationships:
-	• Many-to-One with User: A cart belongs to a user.
-	• Many-to-One with Product: A cart contains a product.
-	• Many-to-One with Transaction: A cart is associated with a transaction.
+	- Many-to-One with User: A cart belongs to a user.
+	- Many-to-One with Product: A cart contains a product.
+	- Many-to-One with Transaction: A cart is associated with a transaction.
 
 ## Transaction Table:
 - Columns:
-	• ID (int, PK),
-	• UserID (int, FK),
-	• Name (string),
-	• Address (string),
-	• PostalCode (string),
-	• Phone (string),
-	• Day (string),
-	• Date (string),
-	• Status (string),
-	• TotalAmount (int)
+	- ID (int, PK),
+	- UserID (int, FK),
+	- Name (string),
+	- Address (string),
+	- PostalCode (string),
+	- Phone (string),
+	- Day (string),
+	- Date (string),
+	- Status (string),
+	- TotalAmount (int)
 - Relationships:
-	• Many-to-One with User: A transaction belongs to a user.
-	• One-to-Many with Cart: A transaction can have multiple carts.
+	- Many-to-One with User: A transaction belongs to a user.
+	- One-to-Many with Cart: A transaction can have multiple carts.
 
 # API Documentation
 ## User
@@ -118,11 +118,12 @@ https://documenter.getpostman.com/view/26087314/2s93eSYaGe
 
 # How to Access Docker Image
 1. Pull Web and Database Image
-- docker pull nagetpresto/synapsis_test_web
-- docker pull nagetpresto/synapsis_test_db
+	docker pull nagetpresto/synapsis_test_web
+	docker pull nagetpresto/synapsis_test_db
 
 2. Run Database Container first
-docker run -p 5432:5432 -e POSTGRES_USER="postgres" -e POSTGRES_PASSWORD="098765" -e POSTGRES_DB="synapsis_test" -e DB_PORT="5432"  nagetpresto/synapsis_test_db
+	## command
+ docker run -p 5432:5432 -e POSTGRES_USER="postgres" -e POSTGRES_PASSWORD="098765" -e POSTGRES_DB="synapsis_test" -e DB_PORT="5432"  nagetpresto/synapsis_test_db
 
 - Check Database Created in the container
 docker exec -it <db-container-name> psql -U postgres -l
