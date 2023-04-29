@@ -129,13 +129,14 @@ $ docker exec -it <db-container-name> psql -U postgres -l
 output: <db-name>
 
 ## Check Database container host
-docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <db-container-name>
+$ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <db-container-name>
 output: <db-host>
 
 # 3. Run Web Container
 $ docker run -p 3030:3030 -e SERVER_KEY="SB-Mid-server-R5p1DsRrkwGtvUm1trR2_yOb" -e CLIENT_KEY="SB-Mid-client-07Igqhe3u-n4OVVO" -e CLOUD_NAME="dpvugaeq1" -e CLOUD_FOLDER="Synapsis Test" -e API_KEY="823725867286355" -e API_SECRET="fSWh1G7esyFPamIVVJU9dJfM3vU" -e EMAIL_SYSTEM="bilqist1234@gmail.com" -e PASSWORD_SYSTEM="obugcqpocntgtbub" -e CONFIRM_URL="http://localhost:3000/cofirm-email-status/" -e DB_HOST="<db-host>" -e DB_USER="postgres" -e DB_PASSWORD="098765" -e DB_NAME="<db-name>" -e DB_PORT="5432" -e PORT="3030" nagetpresto/synapsis_test_web
 
-4. Test API using PORT: 3030
+# 4. Test API using PORT: 3030
+
 
 
 <!-- # docker pull nagetpresto/synapsis_test_web
