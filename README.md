@@ -117,7 +117,7 @@ https://documenter.getpostman.com/view/26087314/2s93eSYaGe
 - PORT=3030
 
 # How to Access Docker Image
-# 1. Pull Web and Database Image
+## 1. Pull Web and Database Image
 $ docker pull nagetpresto/synapsis_test_web
 $ docker pull nagetpresto/synapsis_test_db
 
@@ -136,6 +136,7 @@ output: <db-host>
 $ docker run -p 3030:3030 -e SERVER_KEY="SB-Mid-server-R5p1DsRrkwGtvUm1trR2_yOb" -e CLIENT_KEY="SB-Mid-client-07Igqhe3u-n4OVVO" -e CLOUD_NAME="dpvugaeq1" -e CLOUD_FOLDER="Synapsis Test" -e API_KEY="823725867286355" -e API_SECRET="fSWh1G7esyFPamIVVJU9dJfM3vU" -e EMAIL_SYSTEM="bilqist1234@gmail.com" -e PASSWORD_SYSTEM="obugcqpocntgtbub" -e CONFIRM_URL="http://localhost:3000/cofirm-email-status/" -e DB_HOST="<db-host>" -e DB_USER="postgres" -e DB_PASSWORD="098765" -e DB_NAME="<db-name>" -e DB_PORT="5432" -e PORT="3030" nagetpresto/synapsis_test_web
 
 # 4. Test API using PORT: 3030
+
 
 
 
