@@ -118,17 +118,20 @@ https://documenter.getpostman.com/view/26087314/2s93eSYaGe
 
 # How to Access Docker Image
 1. Pull Web and Database Image
-	docker pull nagetpresto/synapsis_test_web
-	docker pull nagetpresto/synapsis_test_db
+## Command
+docker pull nagetpresto/synapsis_test_web
+docker pull nagetpresto/synapsis_test_db
 
 2. Run Database Container first
-	## command
- docker run -p 5432:5432 -e POSTGRES_USER="postgres" -e POSTGRES_PASSWORD="098765" -e POSTGRES_DB="synapsis_test" -e DB_PORT="5432"  nagetpresto/synapsis_test_db
+## command
+docker run -p 5432:5432 -e POSTGRES_USER="postgres" -e POSTGRES_PASSWORD="098765" -e POSTGRES_DB="synapsis_test" -e DB_PORT="5432"  nagetpresto/synapsis_test_db
 
-- Check Database Created in the container
+## Check Database Created in the container
+## command
 docker exec -it <db-container-name> psql -U postgres -l
 output: <db-name>
-- Check Database container host
+## Check Database container host
+## command
 docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <db-container-name>
 output: <db-host>
 
