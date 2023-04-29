@@ -138,14 +138,14 @@ Run this command:
 ```sh 
 	docker exec -it <db-container-name> psql -U postgres -l
 ```
-output:db-name
+output: db-name
 
 ##### b. Check Database container host
 Run this command:
 ```sh 
 	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <db-container-name>
 ```
-output:<db-host>
+output: db-host
 
 ### 3. Run Web Container
 Run this command:
