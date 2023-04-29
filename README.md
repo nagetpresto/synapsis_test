@@ -20,7 +20,7 @@ https://hub.docker.com/r/nagetpresto/synapsis_test_db
 - Stock is automatically deducted upon successful orders.
 
 # Database Design
-## User Table:
+### User Table:
 - Columns: 
 	- ID (int, PK),
 	- Name (string),
@@ -33,7 +33,7 @@ https://hub.docker.com/r/nagetpresto/synapsis_test_db
 - Relationships:
 	- One-to-Many with Transaction: A user can have multiple transactions.
 
-## Category Table:
+### Category Table:
 - Columns: 
 	- ID (int, PK),
 	- Name (string),
@@ -41,7 +41,7 @@ https://hub.docker.com/r/nagetpresto/synapsis_test_db
 - Relationships:
 	- One-to-Many with Product: A category can have multiple products.
 
-## Product Table:
+### Product Table:
 - Columns: 
 	- ID (int, PK),
 	- CategoryID (int, FK),
@@ -54,7 +54,7 @@ https://hub.docker.com/r/nagetpresto/synapsis_test_db
 	- Many-to-One with Category: A product belongs to a category.
 	- One-to-Many with Cart: A product can be present in multiple carts.
 
-## Cart Table:
+### Cart Table:
 - Columns:
 	- ID (int, PK),
 	- UserID (int, FK),
@@ -67,7 +67,7 @@ https://hub.docker.com/r/nagetpresto/synapsis_test_db
 	- Many-to-One with Product: A cart contains a product.
 	- Many-to-One with Transaction: A cart is associated with a transaction.
 
-## Transaction Table:
+### Transaction Table:
 - Columns:
 	- ID (int, PK),
 	- UserID (int, FK),
@@ -84,15 +84,15 @@ https://hub.docker.com/r/nagetpresto/synapsis_test_db
 	- One-to-Many with Cart: A transaction can have multiple carts.
 
 # API Documentation
-## User
+### User
 https://documenter.getpostman.com/view/26087314/2s93eSYF6F
-## Category
+### Category
 https://documenter.getpostman.com/view/26087314/2s93eSYFF7
-## Product
+### Product
 https://documenter.getpostman.com/view/26087314/2s93eSYa3H
-## Cart
+### Cart
 https://documenter.getpostman.com/view/26087314/2s93eSYa7m
-## Transaction
+### Transaction
 https://documenter.getpostman.com/view/26087314/2s93eSYaGe
 
 # Environment
@@ -117,9 +117,15 @@ https://documenter.getpostman.com/view/26087314/2s93eSYaGe
 - PORT=3030
 
 # How to Access Docker Image
-## 1. Pull Web and Database Image
-$ docker pull nagetpresto/synapsis_test_web
-$ docker pull nagetpresto/synapsis_test_db
+### 1. Pull Web and Database Image
+Run this command to pull Web Image:
+```bash 
+	docker pull nagetpresto/synapsis_test_web
+```
+Run this command to pull Db Image:
+```bash 
+	docker pull nagetpresto/synapsis_test_db
+```
 
 # 2. Run Database Container first
 $ docker run -p 5432:5432 -e POSTGRES_USER="postgres" -e POSTGRES_PASSWORD="098765" -e POSTGRES_DB="synapsis_test" -e DB_PORT="5432"  nagetpresto/synapsis_test_db
