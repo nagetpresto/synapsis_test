@@ -133,19 +133,19 @@ Run this command:
 	docker run -p 5432:5432 -e POSTGRES_USER="postgres" -e POSTGRES_PASSWORD="098765" -e POSTGRES_DB="synapsis_test" -e DB_PORT="5432"  nagetpresto/synapsis_test_db
 ```
 
-	#### a. Check Database Created in the container
-	Run this command:
+##### a. Check Database Created in the container
+Run this command:
 ```sh 
 	docker exec -it <db-container-name> psql -U postgres -l
 ```
-	output: <db-name>
+output: <db-name>
 
-	#### b. Check Database container host
-	Run this command:
+##### b. Check Database container host
+Run this command:
 ```sh 
 	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <db-container-name>
 ```
-	output: <db-host>
+output: <db-host>
 
 ### 3. Run Web Container
 Run this command:
