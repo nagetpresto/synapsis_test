@@ -10,6 +10,9 @@ services:
     volumes:
       - .:/usr/src/app
     command: air main.go -b 0.0.0.0
+    depends_on:
+      - db
+
   db:
     image: postgres:15
     environment:
